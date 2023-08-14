@@ -31,7 +31,11 @@ import shlex
 
 class Bind(object):
 
-    def __init__(self, bin, path=None, direct_output=False):
+    def __init__(self, bin, path=None, direct_output=False, output_flag=1):
+        if self.isIpy() == 'jupyter':
+            self.output_flag = 2
+        else:
+            self.output_flag = output_flag
         self.bin = [bin]
         self.direct_output = direct_output
         if path is None:
@@ -53,6 +57,8 @@ class Bind(object):
             p = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, universal_newlines=True)
             stdout, stderr = p.communicate()
+            if self.output_flag == 2:
+                return p.poll()
             if p.poll() != 0:
                 raise RuntimeError("{}".format(stdout))
             return stdout
@@ -72,10 +78,32 @@ class Bind(object):
                 raise RuntimeError("{}".format(self.output))
             return stdout
 
+    def isIpy(self):
+        try:
+            check = str(type(get_ipython()))
+            if 'zmqshell' in check:
+                return 'jupyter'
+            elif 'terminal' in check:
+                return 'ipython'
+            else:
+                return False
+        except:
+            return False
+
     def __getattr__(self,
                     name):
 
-        def call_cmd(*args):
+        def call_cmd(*args, **kwargs):
+            for k, v in kwargs.items():
+                if k == "_":
+                    continue
+                elif len(k) > 1:
+                    k = "--"+str(k)
+                else:
+                    k = "-"+str(k)
+                args.append(k)
+                if len(v):
+                    args.append(v)
 
             arg = " ".join([str(i) for i in args])
             command = "{0} {1} {2}".format(
