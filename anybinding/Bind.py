@@ -80,7 +80,7 @@ class Bind(object):
 
     def isIpy(self):
         try:
-            check = str(type(get_ipython())) # noqa: E9,F63,F7,F82
+            check = str(type(get_ipython()))
             if 'zmqshell' in check:
                 return 'jupyter'
             elif 'terminal' in check:
