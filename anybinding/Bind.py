@@ -80,7 +80,7 @@ class Bind(object):
 
     def isIpy(self):
         try:
-            check = str(type(get_ipython())) # noqa: F821
+            check = str(type(get_ipython()))  # noqa: F821
             if 'zmqshell' in check:
                 return 'jupyter'
             elif 'terminal' in check:
@@ -97,6 +97,8 @@ class Bind(object):
             args = list(args)
             for k, v in kwargs.items():
                 if k == "_":
+                    if len(v):
+                        args.append(v)
                     continue
                 elif len(k) > 1:
                     k = "--"+str(k)
