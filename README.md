@@ -13,4 +13,4 @@ pip install anybinding
 
 ## Usage
 
-see `test.py` for example and for git program please use https://github.com/guangrei/Gitpybinding
+open `test.py` for example usage or see projects that use `Anypybinding` [here](https://github.com/guangrei/Anypybinding/network/dependents).
