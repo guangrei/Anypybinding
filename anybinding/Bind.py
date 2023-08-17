@@ -101,9 +101,9 @@ class Bind(object):
                         args.append(v)
                     continue
                 elif len(k) > 1:
-                    k = "--"+str(k)
+                    k = "--"+str(k).replace("_", "-")
                 else:
-                    k = "-"+str(k)
+                    k = "-"+str(k).replace("_", "-")
                 args.append(k)
                 if len(v):
                     args.append(v)
