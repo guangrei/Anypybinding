@@ -31,12 +31,13 @@ import shlex
 
 class Bind(object):
 
-    def __init__(self, bin, path=None, direct_output=False, output_flag=1):
+    def __init__(self, bin, path=None, direct_output=False, output_flag=1, timeout=0):
         if self.isIpy() == 'jupyter':
             self.output_flag = 2
         else:
             self.output_flag = output_flag
         self.bin = [bin]
+        self.timeout = timeout
         self.direct_output = direct_output
         if path is None:
             self.path = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -50,12 +51,22 @@ class Bind(object):
         command = shlex.split(command)
         if self.direct_output:
             p = subprocess.Popen(command, cwd=self.path)
+            if self.timeout > 0:
+                p.wait(timeout=self.timeout)
+            else:
+                p.wait()
+            self.pid = p.pid
             p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("exit code: {}".format(p.poll()))
         else:
             p = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, universal_newlines=True)
+            if self.timeout > 0:
+                p.wait(timeout=self.timeout)
+            else:
+                p.wait()
+            self.pid = p.pid
             stdout, stderr = p.communicate()
             if self.output_flag == 2:
                 return p.poll()
@@ -67,12 +78,22 @@ class Bind(object):
         command = self.bin + list(args)
         if self.direct_output:
             p = subprocess.Popen(command, cwd=self.path)
+            if self.timeout > 0:
+                p.wait(timeout=self.timeout)
+            else:
+                p.wait()
+            self.pid = p.pid
             p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("exit code: {}".format(p.poll()))
         else:
             p = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, universal_newlines=True)
+            if self.timeout > 0:
+                p.wait(timeout=self.timeout)
+            else:
+                p.wait()
+            self.pid = p.pid
             stdout, stderr = p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("{}".format(self.output))
