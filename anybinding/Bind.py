@@ -37,6 +37,7 @@ class Bind(object):
         else:
             self.output_flag = output_flag
         self.bin = [bin]
+        self.pid = 0
         self.timeout = timeout
         self.direct_output = direct_output
         if path is None:

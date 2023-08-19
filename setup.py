@@ -10,7 +10,7 @@ with open(path.join(this_directory, 'README.md')) as f:
 
 setup(
     name='anybinding',
-    version='v2.0.1',
+    version='v2.0.2',
     packages=['anybinding', ],
     license='MIT',
     author="guangrei",

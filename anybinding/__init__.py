@@ -1,2 +1,2 @@
-#-*-coding:utf8;-*-
+# -*-coding:utf8;-*-
 from .Bind import Bind
