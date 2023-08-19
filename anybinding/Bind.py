@@ -52,22 +52,22 @@ class Bind(object):
         command = shlex.split(command)
         if self.direct_output:
             p = subprocess.Popen(command, cwd=self.path)
+            self.pid = p.pid
             if self.timeout > 0:
                 p.wait(timeout=self.timeout)
             else:
                 p.wait()
-            self.pid = p.pid
             p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("exit code: {}".format(p.poll()))
         else:
             p = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, universal_newlines=True)
+            self.pid = p.pid
             if self.timeout > 0:
                 p.wait(timeout=self.timeout)
             else:
                 p.wait()
-            self.pid = p.pid
             stdout, stderr = p.communicate()
             if self.output_flag == 2:
                 return p.poll()
@@ -79,22 +79,22 @@ class Bind(object):
         command = self.bin + [str(i) for i in args]
         if self.direct_output:
             p = subprocess.Popen(command, cwd=self.path)
+            self.pid = p.pid
             if self.timeout > 0:
                 p.wait(timeout=self.timeout)
             else:
                 p.wait()
-            self.pid = p.pid
             p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("exit code: {}".format(p.poll()))
         else:
             p = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT, universal_newlines=True)
+            self.pid = p.pid
             if self.timeout > 0:
                 p.wait(timeout=self.timeout)
             else:
                 p.wait()
-            self.pid = p.pid
             stdout, stderr = p.communicate()
             if p.poll() != 0:
                 raise RuntimeError("{}".format(self.output))
