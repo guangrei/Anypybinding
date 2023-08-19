@@ -75,7 +75,7 @@ class Bind(object):
             return stdout
 
     def _(self, *args):
-        command = self.bin + list(args)
+        command = self.bin + [str(i) for i in args]
         if self.direct_output:
             p = subprocess.Popen(command, cwd=self.path)
             if self.timeout > 0:
